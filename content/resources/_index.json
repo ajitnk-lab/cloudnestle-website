@@ -1,6 +1,23 @@
 {
   "resources": [
     {
+      "slug": "aws-cost-optimization-strategies",
+      "title": "AWS Cost Optimization Strategies",
+      "description": "Managing costs effectively in Amazon Web Services (AWS) is crucial for maximizing the benefits of cloud computing. This guide provides a detailed roadmap to optimize your AWS expenditures through...",
+      "type": "Guide",
+      "category": "Cloud",
+      "tags": [
+        "aws",
+        "cost",
+        "optimization",
+        "finops"
+      ],
+      "icon": "\ud83d\udcda",
+      "color": "#2563eb",
+      "publishedAt": "2026-02-17",
+      "pdfUrl": "/resources/pdfs/aws-cost-optimization-strategies.pdf"
+    },
+    {
       "slug": "docker-container-security-best-practices",
       "title": "Docker Container Security Best Practices",
       "description": "Securing Docker containers is crucial for maintaining the integrity and reliability of your applications. This guide provides a comprehensive, step-by-step approach to implementing robust security...",
