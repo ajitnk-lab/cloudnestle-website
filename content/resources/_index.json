@@ -1,6 +1,23 @@
 {
   "resources": [
     {
+      "slug": "docker-container-security-best-practices",
+      "title": "Docker Container Security Best Practices",
+      "description": "Securing Docker containers is crucial for maintaining the integrity and reliability of your applications. This guide provides a comprehensive, step-by-step approach to implementing robust security...",
+      "type": "Guide",
+      "category": "Security",
+      "tags": [
+        "docker",
+        "containers",
+        "security",
+        "devops"
+      ],
+      "icon": "\ud83d\udcda",
+      "color": "#2563eb",
+      "publishedAt": "2026-02-17",
+      "pdfUrl": "/resources/pdfs/docker-container-security-best-practices.pdf"
+    },
+    {
       "slug": "aws-s3-security-guide",
       "title": "AWS S3 Security Guide",
       "description": "Complete guide to securing S3 buckets",
