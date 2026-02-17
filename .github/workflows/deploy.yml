@@ -1,72 +1,60 @@
-name: Deploy CloudNestle Website
+name: Generate Resource PDFs
 
 on:
   push:
     branches: [main]
     paths:
-      - 'content/**'
-      - 'src/**'
-      - 'public/**'
-      - '.github/workflows/**'
+      - 'content/resources/**'
 
 env:
   AWS_REGION: us-east-1
+  S3_BUCKET: cloudnestle-website-637423202175
+  CLOUDFRONT_ID: E2GJYMENMRGUZO
 
 jobs:
-  build-and-deploy:
+  generate-pdfs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Next.js site
-        run: npm run build
 
       - name: Install Pandoc
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-extra
 
-      - name: Generate PDFs from resources
+      - name: Generate PDFs
         run: |
-          mkdir -p out/resources/pdfs
+          mkdir -p pdfs
           for md_file in content/resources/*.md; do
             if [ -f "$md_file" ] && [ "$(basename "$md_file")" != "README.md" ]; then
               slug=$(basename "$md_file" .md)
-              echo "Generating PDF for: $slug"
+              echo "Generating PDF: $slug"
               pandoc "$md_file" \
-                -o "out/resources/pdfs/${slug}.pdf" \
+                -o "pdfs/${slug}.pdf" \
                 --pdf-engine=pdflatex \
                 -V geometry:margin=1in \
                 -V fontsize=11pt \
                 --toc \
-                --highlight-style=tango \
-                2>/dev/null || echo "Failed to generate PDF for $slug"
+                --highlight-style=tango || echo "Failed: $slug"
             fi
           done
-          ls -lh out/resources/pdfs/ 2>/dev/null || echo "No PDFs generated"
+          ls -lh pdfs/
 
-      - name: Configure AWS credentials
+      - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy to S3
+      - name: Upload to S3
         run: |
-          aws s3 sync out/ s3://cloudnestle-website-637423202175/ --delete --cache-control max-age=31536000,public
+          aws s3 sync pdfs/ s3://${{ env.S3_BUCKET }}/resources/pdfs/ \
+            --cache-control max-age=31536000 \
+            --content-type application/pdf
 
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id E2GJYMENMRGUZO \
-            --paths "/*" "/resources/*" "/resources/pdfs/*"
+            --distribution-id ${{ env.CLOUDFRONT_ID }} \
+            --paths "/resources/pdfs/*"
