@@ -1,0 +1,20 @@
+{
+  "resources": [
+    {
+      "slug": "aws-s3-security-guide",
+      "title": "AWS S3 Security Guide",
+      "description": "Complete guide to securing S3 buckets",
+      "type": "Guide",
+      "category": "Security",
+      "tags": [
+        "aws",
+        "s3",
+        "security"
+      ],
+      "icon": "\ud83d\udcda",
+      "color": "#2563eb",
+      "publishedAt": "2026-02-17",
+      "pdfUrl": "/resources/pdfs/aws-s3-security-guide.pdf"
+    }
+  ]
+}
